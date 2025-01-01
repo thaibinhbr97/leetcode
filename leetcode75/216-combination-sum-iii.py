@@ -15,23 +15,44 @@ def combinationSum3(k, n):
     2. the combinations can be returned in any order as long as providing all possible valid combinations in the result
 
     idea:
-    - can use a hashmap to keep track of the existence of each number from 1 to 9 -> make sure 1 to 9 numbers are used at least once
+    use backtrack to explore all possible combinations of numbers from 1 to 9
+    start with an empty combination and iteratively add numbers to it
+    ensure that the sum of the combination does not exceed the target sum 'n'
+    and combination contains exactly 'k' numbers
+    if a valid combination is found, add it to the result list
 
     """
     result = []
 
+    # def backtrack(combination, start, sumSoFar):
+    #     # base case
+    #     if len(combination) == k:
+    #         if sumSoFar == n:
+    #             result.append(combination)
+    #         return
+
+    #     # recursive case
+    #     for i in range(start, 9 + 1):
+    #         if sumSoFar + i > n:
+    #             break
+    #         backtrack(combination + [i], i + 1, sumSoFar + i)
+
     def backtrack(combination, start, sumSoFar):
         # base case
+        # if combination size equals k
         if len(combination) == k:
             if sumSoFar == n:
-                result.append(combination)
+                result.append(combination[:])
             return
-
         # recursive case
         for i in range(start, 9 + 1):
+            # if sumSoFar plus next added number exceeds n, skip further exploration
             if sumSoFar + i > n:
                 break
-            backtrack(combination + [i], i + 1, sumSoFar + i)
+
+            combination.append(i)  # choose a next number
+            backtrack(combination, i + 1, sumSoFar + i)  # explore further
+            combination.pop()  # undo the choice (backtrack)
 
     backtrack([], 1, 0)
     return result
