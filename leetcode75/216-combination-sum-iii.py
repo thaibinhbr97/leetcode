@@ -20,16 +20,20 @@ def combinationSum3(k, n):
     """
     result = []
 
-    def tryCombination(combination, k, n, start):
-        if k == len(combination) and n == 0:
-            result.append(combination.copy())
+    def backtrack(combination, start, sumSoFar):
+        # base case
+        if len(combination) == k:
+            if sumSoFar == n:
+                result.append(combination)
             return
-        for i in range(start, 9 + 1):
-            combination.append(i)
-            tryCombination(combination, k, n - i, i + 1)
-            combination.pop()
 
-    tryCombination([], k, n, 1)
+        # recursive case
+        for i in range(start, 9 + 1):
+            if sumSoFar + i > n:
+                break
+            backtrack(combination + [i], i + 1, sumSoFar + i)
+
+    backtrack([], 1, 0)
     return result
 
 
